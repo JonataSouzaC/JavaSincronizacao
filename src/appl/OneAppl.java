@@ -201,6 +201,13 @@ public class OneAppl {
 				if (first.equals(client_name + "_acquire_x")) {
 
 					System.out.print("\nAcessando X\n");
+					try {
+						Thread.currentThread().sleep(2000);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} // 1 segundo
+	
 					/*
 					 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) { // TODO
 					 * Auto-generated catch block e1.printStackTrace(); }
