@@ -28,6 +28,12 @@ public class OneAppl {
 
 		System.out.print("Enter the Client address (ex. 10.128.0.3): ");
 		String clientAddress = reader.next();
+		try {
+			Thread.currentThread().sleep(5000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} // 1 segundo
 
 		PubSubClient joubert = new PubSubClient(clientAddress, 8081);
 		PubSubClient debora = new PubSubClient(clientAddress, 8082);
