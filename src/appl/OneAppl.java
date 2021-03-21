@@ -21,13 +21,17 @@ public class OneAppl {
 
 	public OneAppl(boolean flag) throws InterruptedException {
 		Scanner reader = new Scanner(System.in);  // Reading from System.in
-		System.out.print("Enter the Broker address (ex. localhost): ");
+		System.out.print("Enter the Broker address (ex. 10.128.0.2): ");
 		String brokerAddress = reader.next();
 		System.out.print("Enter the Broker port (ex.8080): ");
 		int brokerPort = reader.nextInt();
-		PubSubClient joubert = new PubSubClient("10.128.0.3", 8081);
-		PubSubClient debora = new PubSubClient("10.128.0.3", 8082);
-		PubSubClient jonata = new PubSubClient("10.128.0.3", 8083);
+
+		System.out.print("Enter the Client address (ex. 10.128.0.3): ");
+		String clientAddress = reader.next();
+
+		PubSubClient joubert = new PubSubClient(clientAddress, 8081);
+		PubSubClient debora = new PubSubClient(clientAddress, 8082);
+		PubSubClient jonata = new PubSubClient(clientAddress, 8083);
 
 		
 		joubert.subscribe(brokerAddress, brokerPort);
@@ -151,7 +155,7 @@ public class OneAppl {
 
 			while (true) {
 				try {
-					Thread.currentThread().sleep(5000);
+					Thread.currentThread().sleep(1000);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
