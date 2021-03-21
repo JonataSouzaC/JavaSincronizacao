@@ -20,7 +20,7 @@ public class OneAppl {
 	}
 
 	public OneAppl(boolean flag) throws InterruptedException {
-		Scanner reader = new Scanner(System.in);  // Reading from System.in
+		Scanner reader = new Scanner(System.in); // Reading from System.in
 		System.out.print("Enter the Broker address (ex. 10.128.0.2): ");
 		String brokerAddress = reader.next();
 		System.out.print("Enter the Broker port (ex.8080): ");
@@ -33,26 +33,32 @@ public class OneAppl {
 		PubSubClient debora = new PubSubClient(clientAddress, 8082);
 		PubSubClient jonata = new PubSubClient(clientAddress, 8083);
 
-		
 		joubert.subscribe(brokerAddress, brokerPort);
 		debora.subscribe(brokerAddress, brokerPort);
 		jonata.subscribe(brokerAddress, brokerPort);
-		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort);
-		Thread accessTwo = new ThreadSincronized(debora, "x", "jonata", brokerAddress, brokerPort);
-		Thread accessThree = new ThreadSincronized(jonata, "x", "joubert", brokerAddress, brokerPort);
-		Thread accessFour = new ThreadSincronized(jonata, "x", "debora", brokerAddress, brokerPort);
-		// "localhost", 8080);
+		Thread accessOne = new ThreadSincronized(joubert, "x", clientAddress.concat("joubert"), brokerAddress, brokerPort);
+		Thread accessTwo = new ThreadSincronized(debora, "x", clientAddress.concat("jonata"), brokerAddress, brokerPort);
+		Thread accessThree = new ThreadSincronized(joubert, "x", clientAddress.concat("joubert"), brokerAddress, brokerPort);
+		Thread accessFour = new ThreadSincronized(debora, "x", clientAddress.concat("debora"), brokerAddress, brokerPort);
+		Thread accessFive = new ThreadSincronized(jonata, "x", clientAddress.concat("jonata"), brokerAddress, brokerPort);
+		Thread accessSix = new ThreadSincronized(debora, "x", clientAddress.concat("debora"), brokerAddress, brokerPort);
+		Thread accessSeven = new ThreadSincronized(joubert, "x", clientAddress.concat("joubert"), brokerAddress, brokerPort);
 
 		accessOne.start();
 		accessTwo.start();
 		accessThree.start();
 		accessFour.start();
-
+		accessFive.start();
+		accessSix.start();
+		accessSeven.start();
 		try {
 			accessTwo.join();
 			accessOne.join();
 			accessThree.join();
 			accessFour.join();
+			accessFive.join();
+			accessSix.join();
+			accessSeven.join();
 		} catch (Exception e) {
 
 		}
@@ -193,7 +199,7 @@ public class OneAppl {
 				String first = it2.next();
 
 				if (first.equals(client_name + "_acquire_x")) {
-					
+
 					System.out.print("\nAcessando X\n");
 					/*
 					 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) { // TODO
