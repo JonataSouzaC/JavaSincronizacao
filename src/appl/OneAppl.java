@@ -1,6 +1,8 @@
 package appl;
 
+import java.security.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
@@ -21,19 +23,16 @@ public class OneAppl {
 
 	public OneAppl(boolean flag) throws InterruptedException {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
-		System.out.print("Enter the Broker address (ex. 10.128.0.2): ");
-		String brokerAddress = reader.next();
-		System.out.print("Enter the Broker port (ex.8080): ");
-		int brokerPort = reader.nextInt();
+		String brokerAddress = "10.128.0.2";
+		int brokerPort = 8080;
+		//System.out.print("Enter the Broker address (ex. 10.128.0.2): ");
+		//String brokerAddress = reader.next();
+		//System.out.print("Enter the Broker port (ex.8080): ");
+		//int brokerPort = reader.nextInt();
 
-		System.out.print("Enter the Client address (ex. 10.128.0.3): ");
-		String clientAddress = reader.next();
-		try {
-			Thread.currentThread().sleep(5000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} // 1 segundo
+		//System.out.print("Enter the Client address (ex. 10.128.0.3): ");
+		//String clientAddress = reader.next();
+		String clientAddress = "10.128.0.4";
 
 		PubSubClient joubert = new PubSubClient(clientAddress, 8081);
 		PubSubClient debora = new PubSubClient(clientAddress, 8082);
@@ -42,13 +41,14 @@ public class OneAppl {
 		joubert.subscribe(brokerAddress, brokerPort);
 		debora.subscribe(brokerAddress, brokerPort);
 		jonata.subscribe(brokerAddress, brokerPort);
-		Thread accessOne = new ThreadSincronized(joubert, "x", clientAddress.concat("joubert"), brokerAddress, brokerPort);
-		Thread accessTwo = new ThreadSincronized(debora, "x", clientAddress.concat("jonata"), brokerAddress, brokerPort);
-		Thread accessThree = new ThreadSincronized(joubert, "x", clientAddress.concat("joubert"), brokerAddress, brokerPort);
-		Thread accessFour = new ThreadSincronized(debora, "x", clientAddress.concat("debora"), brokerAddress, brokerPort);
-		Thread accessFive = new ThreadSincronized(jonata, "x", clientAddress.concat("jonata"), brokerAddress, brokerPort);
-		Thread accessSix = new ThreadSincronized(debora, "x", clientAddress.concat("debora"), brokerAddress, brokerPort);
-		Thread accessSeven = new ThreadSincronized(joubert, "x", clientAddress.concat("joubert"), brokerAddress, brokerPort);
+
+		Thread accessOne = new ThreadSincronized(joubert, "x", "roberto", brokerAddress, brokerPort, 1);
+		Thread accessTwo = new ThreadSincronized(debora, "x", "alan", brokerAddress, brokerPort, 1);
+		Thread accessThree = new ThreadSincronized(joubert, "x", "roberto", brokerAddress, brokerPort, 2);
+		Thread accessFour = new ThreadSincronized(debora, "x", "luis", brokerAddress, brokerPort, 1);
+		Thread accessFive = new ThreadSincronized(jonata, "x", "luis", brokerAddress, brokerPort, 2);
+		Thread accessSix = new ThreadSincronized(debora, "x", "alan", brokerAddress, brokerPort, 2);
+		Thread accessSeven = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 3);
 
 		accessOne.start();
 		accessTwo.start();
@@ -127,15 +127,17 @@ public class OneAppl {
 		String host;
 		int port;
 
-		public ThreadSincronized(PubSubClient c, String topic, String client_name, String host, int port) {
+		public ThreadSincronized(PubSubClient c, String topic, String client_name, String host, int port, int id) {
 			this.c = c;
 			this.topic = topic;
-			this.client_name = client_name;
+			this.client_name = Integer.toString(id).concat(client_name);
 			this.host = host;
 			this.port = port;
+
 		}
 
 		public void run() {
+
 			Thread access = new ThreadWrapper(c, client_name.concat("_acquire_x"), host, port);
 			access.start();
 			try {
@@ -213,7 +215,7 @@ public class OneAppl {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} // 1 segundo
-	
+
 					/*
 					 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) { // TODO
 					 * Auto-generated catch block e1.printStackTrace(); }
