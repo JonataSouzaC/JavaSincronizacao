@@ -25,30 +25,30 @@ public class OneAppl {
 		String brokerAddress = reader.next();
 		System.out.print("Enter the Broker port (ex.8080): ");
 		int brokerPort = reader.nextInt();
-		PubSubClient joubert = new PubSubClient(brokerAddress, 8081);
-		PubSubClient debora = new PubSubClient(brokerAddress, 8082);
-		PubSubClient jonata = new PubSubClient(brokerAddress, 8083);
+		PubSubClient joubert = new PubSubClient(brokerAddress, 8080);
+		//PubSubClient debora = new PubSubClient(brokerAddress, 8082);
+		//PubSubClient jonata = new PubSubClient(brokerAddress, 8083);
 
 		
 		joubert.subscribe(brokerAddress, brokerPort);
-		debora.subscribe(brokerAddress, brokerPort);
-		jonata.subscribe(brokerAddress, brokerPort);
+		//debora.subscribe(brokerAddress, brokerPort);
+		//jonata.subscribe(brokerAddress, brokerPort);
 		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort);
-		Thread accessTwo = new ThreadSincronized(debora, "x", "jonata", brokerAddress, brokerPort);
-		Thread accessThree = new ThreadSincronized(jonata, "x", "joubert", brokerAddress, brokerPort);
-		Thread accessFour = new ThreadSincronized(jonata, "x", "debora", brokerAddress, brokerPort);
+		//Thread accessTwo = new ThreadSincronized(debora, "x", "jonata", brokerAddress, brokerPort);
+		//Thread accessThree = new ThreadSincronized(jonata, "x", "joubert", brokerAddress, brokerPort);
+		//Thread accessFour = new ThreadSincronized(jonata, "x", "debora", brokerAddress, brokerPort);
 		// "localhost", 8080);
 
 		accessOne.start();
-		accessTwo.start();
+		/*accessTwo.start();
 		accessThree.start();
-		accessFour.start();
+		accessFour.start();*/
 
 		try {
-			accessTwo.join();
+			//accessTwo.join();
 			accessOne.join();
-			accessThree.join();
-			accessFour.join();
+			//accessThree.join();
+			//accessFour.join();
 		} catch (Exception e) {
 
 		}
@@ -82,8 +82,8 @@ public class OneAppl {
 		 * aux.getLogId() + " | "); } System.out.println();
 		 */
 		joubert.stopPubSubClient();
-		debora.stopPubSubClient();
-		jonata.stopPubSubClient();
+		//debora.stopPubSubClient();
+		//jonata.stopPubSubClient();
 	}
 
 	class ThreadWrapper extends Thread {
