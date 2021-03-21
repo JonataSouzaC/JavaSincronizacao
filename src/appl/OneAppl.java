@@ -2,6 +2,7 @@ package appl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 import java.util.Set;
 
 import core.Message;
@@ -22,13 +23,19 @@ public class OneAppl {
 		PubSubClient joubert = new PubSubClient("localhost", 8081);
 		PubSubClient debora = new PubSubClient("localhost", 8082);
 		PubSubClient jonata = new PubSubClient("localhost", 8083);
-		joubert.subscribe("localhost", 8080);
-		debora.subscribe("localhost", 8080);
-		jonata.subscribe("localhost", 8080);
-		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", "localhost", 8080);
-		Thread accessTwo = new ThreadSincronized(debora, "x", "jonata", "localhost", 8080);
-		Thread accessThree = new ThreadSincronized(jonata, "x", "joubert", "localhost", 8080);
-		Thread accessFour = new ThreadSincronized(jonata, "x", "debora", "localhost", 8080);
+		Scanner reader = new Scanner(System.in);  // Reading from System.in
+		System.out.print("Enter the Broker address (ex. localhost): ");
+		String brokerAddress = reader.next();
+		System.out.print("Enter the Broker port (ex.8080): ");
+		int brokerPort = reader.nextInt();
+		
+		joubert.subscribe(brokerAddress, brokerPort);
+		debora.subscribe(brokerAddress, brokerPort);
+		jonata.subscribe(brokerAddress, brokerPort);
+		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort);
+		Thread accessTwo = new ThreadSincronized(debora, "x", "jonata", brokerAddress, brokerPort);
+		Thread accessThree = new ThreadSincronized(jonata, "x", "joubert", brokerAddress, brokerPort);
+		Thread accessFour = new ThreadSincronized(jonata, "x", "debora", brokerAddress, brokerPort);
 		// "localhost", 8080);
 
 		accessOne.start();
