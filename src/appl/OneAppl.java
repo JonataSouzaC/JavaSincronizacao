@@ -119,7 +119,7 @@ public class OneAppl {
 		}
 
 		public void run() {
-			Thread access = new ThreadWrapper(c, client_name.concat("_acquire_x"), "localhost", 8080);
+			Thread access = new ThreadWrapper(c, client_name.concat("_acquire_x"), host, port);
 			access.start();
 			try {
 				access.join();
@@ -194,7 +194,7 @@ public class OneAppl {
 					 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) { // TODO
 					 * Auto-generated catch block e1.printStackTrace(); }
 					 */
-					access = new ThreadWrapper(c, client_name.concat("_release_x"), "localhost", 8080);
+					access = new ThreadWrapper(c, client_name.concat("_release_x"), host, port);
 					access.start();
 					try {
 						access.join();
