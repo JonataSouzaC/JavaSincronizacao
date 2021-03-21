@@ -25,9 +25,9 @@ public class OneAppl {
 		String brokerAddress = reader.next();
 		System.out.print("Enter the Broker port (ex.8080): ");
 		int brokerPort = reader.nextInt();
-		PubSubClient joubert = new PubSubClient(brokerAddress, 8081);
-		PubSubClient debora = new PubSubClient(brokerAddress, 8082);
-		PubSubClient jonata = new PubSubClient(brokerAddress, 8083);
+		PubSubClient joubert = new PubSubClient("10.128.0.3", 8081);
+		PubSubClient debora = new PubSubClient("10.128.0.3", 8082);
+		PubSubClient jonata = new PubSubClient("10.128.0.3", 8083);
 
 		
 		joubert.subscribe(brokerAddress, brokerPort);
