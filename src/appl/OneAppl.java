@@ -20,14 +20,15 @@ public class OneAppl {
 	}
 
 	public OneAppl(boolean flag) throws InterruptedException {
-		PubSubClient joubert = new PubSubClient("localhost", 8081);
-		PubSubClient debora = new PubSubClient("localhost", 8082);
-		PubSubClient jonata = new PubSubClient("localhost", 8083);
 		Scanner reader = new Scanner(System.in);  // Reading from System.in
 		System.out.print("Enter the Broker address (ex. localhost): ");
 		String brokerAddress = reader.next();
 		System.out.print("Enter the Broker port (ex.8080): ");
 		int brokerPort = reader.nextInt();
+		PubSubClient joubert = new PubSubClient(brokerAddress, 8081);
+		PubSubClient debora = new PubSubClient(brokerAddress, 8082);
+		PubSubClient jonata = new PubSubClient(brokerAddress, 8083);
+
 		
 		joubert.subscribe(brokerAddress, brokerPort);
 		debora.subscribe(brokerAddress, brokerPort);
