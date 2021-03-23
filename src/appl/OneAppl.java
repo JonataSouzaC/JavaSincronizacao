@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import core.Message;
 
@@ -42,14 +43,14 @@ public class OneAppl {
 		debora.subscribe(brokerAddress, brokerPort);
 		jonata.subscribe(brokerAddress, brokerPort);
 
-		Thread accessOne = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 1);
+		/*Thread accessOne = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 1);
 		Thread accessTwo = new ThreadSincronized(debora, "x", "roberto", brokerAddress, brokerPort, 1);
 		Thread accessThree = new ThreadSincronized(joubert, "x", "luis", brokerAddress, brokerPort, 1);
 		Thread accessFour = new ThreadSincronized(debora, "x", "luis", brokerAddress, brokerPort, 2);
 		Thread accessFive = new ThreadSincronized(jonata, "x", "alan", brokerAddress, brokerPort, 2);
 		Thread accessSix = new ThreadSincronized(debora, "x", "roberto", brokerAddress, brokerPort, 2);
-		Thread accessSeven = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 3);
-		/*
+		Thread accessSeven = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 3);*/
+		
 
 		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 1);
 		Thread accessTwo = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 1);
@@ -57,7 +58,7 @@ public class OneAppl {
 		Thread accessFour = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 2);
 		Thread accessFive = new ThreadSincronized(jonata, "x", "jonata", brokerAddress, brokerPort, 1);
 		Thread accessSix = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 3);
-		Thread accessSeven = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 3);*/
+		Thread accessSeven = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 3);
 
 		accessOne.start();
 		accessTwo.start();
@@ -154,14 +155,6 @@ public class OneAppl {
 			} catch (Exception e) {
 			}
 
-			Set<Message> log5 = c.getLogMessages();
-			Iterator<Message> it5 = log5.iterator();
-			it5 = log5.iterator();
-			while (it5.hasNext()) {
-				Message aux = it5.next();
-				System.out.print(aux.getContent() + aux.getLogId() + " | ");
-			}
-
 			/*
 			 * Thread access = new ThreadWrapper(c, "joubert_acquire_x", "localhost", 8080);
 			 * access.start(); try { access.join(); } catch (Exception e) { }
@@ -185,20 +178,21 @@ public class OneAppl {
 			 * access.start(); try { access.join(); } catch (Exception e) { }
 			 */
 
+			Set<Message> log = c.getLogMessages();
+			CopyOnWriteArrayList<Message> log2 = new CopyOnWriteArrayList <Message>();
 			while (true) {
 				try {
-					Thread.currentThread().sleep(3000);
+					Thread.currentThread().sleep(1000);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} // 1 segundo
 				
-				Set<Message> log = c.getLogMessages();
-				ArrayList<Message> log2 = new ArrayList <Message>();
-				log2.clear();
+				log = c.getLogMessages();
+				log2 = new CopyOnWriteArrayList <Message>();
 				log2.addAll(log);
-				Iterator<Message> it = log.iterator();
-				it = log.iterator();
+				Iterator<Message> it = log2.iterator();
+				it = log2.iterator();
 				while (it.hasNext()) {
 					Message i = it.next();
 					String content = i.getContent();
@@ -209,7 +203,7 @@ public class OneAppl {
 						}*/
 
 						if (parts[1].equals("release")) {
-							Iterator<Message> it2 = log.iterator();
+							Iterator<Message> it2 = log2.iterator();
 							while (it2.hasNext()) {
 								Message j = it2.next();
 								String content2 = j.getContent();
@@ -225,9 +219,13 @@ public class OneAppl {
 						log2.remove(i);
 					}
 				}
-
-				Iterator<Message> it2 = log2.iterator();
-				String first = it2.next().getContent();
+				String first=null;
+				try{
+					first = log2.get(0).getContent();
+				}
+				catch (Exception e) {
+					System.out.print("ASKEOPASKEOPk X\n");
+				}
 
 				if (first.equals(client_name + "_acquire_x")) {
 
@@ -252,15 +250,16 @@ public class OneAppl {
 					break;
 				}
 			}
-			Set<Message> log = c.getLogMessages();
-			Iterator<Message> it = log.iterator();
-			it = log.iterator();
+			log = c.getLogMessages();
+			log2 = new CopyOnWriteArrayList <Message>();
+			log2.addAll(log);
+			Iterator<Message> it = log2.iterator();
+			it = log2.iterator();
 			while (it.hasNext()) {
 				Message aux = it.next();
 				System.out.print(aux.getContent() + aux.getLogId() + " | ");
 			}
 			System.out.println();
-
 		}
 	}
 
