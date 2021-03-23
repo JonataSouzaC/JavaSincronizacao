@@ -23,16 +23,16 @@ public class OneAppl {
 
 	public OneAppl(boolean flag) throws InterruptedException {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
-			String brokerAddress = "10.128.0.2";
+		String brokerAddress = "localhost";
 		int brokerPort = 8080;
-		//System.out.print("Enter the Broker address (ex. 10.128.0.2): ");
-		//String brokerAddress = reader.next();
-		//System.out.print("Enter the Broker port (ex.8080): ");
-		//int brokerPort = reader.nextInt();
+		// System.out.print("Enter the Broker address (ex. 10.128.0.2): ");
+		// String brokerAddress = reader.next();
+		// System.out.print("Enter the Broker port (ex.8080): ");
+		// int brokerPort = reader.nextInt();
 
-		//System.out.print("Enter the Client address (ex. 10.128.0.3): ");
-		//String clientAddress = reader.next();
-		String clientAddress = "10.128.0.3";
+		// System.out.print("Enter the Client address (ex. 10.128.0.3): ");
+		// String clientAddress = reader.next();
+		String clientAddress = "localhost";
 
 		PubSubClient joubert = new PubSubClient(clientAddress, 8081);
 		PubSubClient debora = new PubSubClient(clientAddress, 8082);
@@ -183,7 +183,7 @@ public class OneAppl {
 					String content = i.getContent();
 					try {
 						String[] parts = content.split("_");
-						if(parts[1].equals("acquire")){
+						if (parts[1].equals("acquire")) {
 							log2.add(content);
 						}
 					} catch (Exception e) {
@@ -193,19 +193,26 @@ public class OneAppl {
 				while (it.hasNext()) {
 					Message i = it.next();
 					String content = i.getContent();
-					String[] parts = content.split("_");
-					if (parts[1].equals("release")) {
-						Iterator<Message> it2 = log.iterator();
-						while (it2.hasNext()) {
-							Message j = it2.next();
-							String content2 = j.getContent();
-							String[] parts2 = content2.split("_");
+					try {
+						String[] parts = content.split("_");
+						if (parts[1].equals("acquire")) {
+							log2.add(content);
+						}
 
-							if (parts2[0].equals(parts[0])) {
-								log2.remove(content2);
-								break;
+						if (parts[1].equals("release")) {
+							Iterator<Message> it2 = log.iterator();
+							while (it2.hasNext()) {
+								Message j = it2.next();
+								String content2 = j.getContent();
+								String[] parts2 = content2.split("_");
+
+								if (parts2[0].equals(parts[0])) {
+									log2.remove(content2);
+									break;
+								}
 							}
 						}
+					} catch (Exception e) {
 					}
 				}
 
