@@ -3,7 +3,9 @@ package appl;
 import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -23,7 +25,7 @@ public class OneAppl {
 
 	public OneAppl(boolean flag) throws InterruptedException {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
-		String brokerAddress = "10.128.0.2";
+		String brokerAddress = "localhost";
 		int brokerPort = 8080;
 		// System.out.print("Enter the Broker address (ex. 10.128.0.2): ");
 		// String brokerAddress = reader.next();
@@ -32,7 +34,7 @@ public class OneAppl {
 
 		// System.out.print("Enter the Client address (ex. 10.128.0.3): ");
 		// String clientAddress = reader.next();
-		String clientAddress = "10.128.0.4";
+		String clientAddress = "localhost";
 
 		PubSubClient joubert = new PubSubClient(clientAddress, 8081);
 		PubSubClient debora = new PubSubClient(clientAddress, 8082);
@@ -174,30 +176,21 @@ public class OneAppl {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} // 1 segundo
-
+				
 				Set<Message> log = c.getLogMessages();
-				ArrayList<String> log2 = new ArrayList<String>();
+				ArrayList<Message> log2 = new ArrayList <Message>();
+				log2.clear();
+				log2.addAll(log);
 				Iterator<Message> it = log.iterator();
-				while (it.hasNext()) {
-					Message i = it.next();
-					String content = i.getContent();
-					try {
-						String[] parts = content.split("_");
-						if (parts[1].equals("acquire")) {
-							log2.add(content);
-						}
-					} catch (Exception e) {
-					}
-				}
 				it = log.iterator();
 				while (it.hasNext()) {
 					Message i = it.next();
 					String content = i.getContent();
 					try {
 						String[] parts = content.split("_");
-						if (parts[1].equals("acquire")) {
+						/*if (parts[1].equals("acquire")) {
 							log2.add(content);
-						}
+						}*/
 
 						if (parts[1].equals("release")) {
 							Iterator<Message> it2 = log.iterator();
@@ -207,7 +200,7 @@ public class OneAppl {
 								String[] parts2 = content2.split("_");
 
 								if (parts2[0].equals(parts[0])) {
-									log2.remove(content2);
+									log2.remove(j);
 									break;
 								}
 							}
@@ -216,8 +209,8 @@ public class OneAppl {
 					}
 				}
 
-				Iterator<String> it2 = log2.iterator();
-				String first = it2.next();
+				Iterator<Message> it2 = log2.iterator();
+				String first = it2.next().getContent();
 
 				if (first.equals(client_name + "_acquire_x")) {
 
