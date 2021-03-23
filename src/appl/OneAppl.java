@@ -27,8 +27,6 @@ public class OneAppl {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
 		String brokerAddress = "10.128.0.2";
 		int brokerPort = 8080;
-		// System.out.print("Enter the Broker address (ex. 10.128.0.2): ");
-		// String brokerAddress = reader.next();
 		// System.out.print("Enter the Broker port (ex.8080): ");
 		// int brokerPort = reader.nextInt();
 
@@ -44,13 +42,22 @@ public class OneAppl {
 		debora.subscribe(brokerAddress, brokerPort);
 		jonata.subscribe(brokerAddress, brokerPort);
 
-		Thread accessOne = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 1);
+		/*Thread accessOne = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 1);
 		Thread accessTwo = new ThreadSincronized(debora, "x", "roberto", brokerAddress, brokerPort, 1);
 		Thread accessThree = new ThreadSincronized(joubert, "x", "luis", brokerAddress, brokerPort, 1);
 		Thread accessFour = new ThreadSincronized(debora, "x", "luis", brokerAddress, brokerPort, 2);
 		Thread accessFive = new ThreadSincronized(jonata, "x", "alan", brokerAddress, brokerPort, 2);
 		Thread accessSix = new ThreadSincronized(debora, "x", "roberto", brokerAddress, brokerPort, 2);
 		Thread accessSeven = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 3);
+		*/
+
+		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 1);
+		Thread accessTwo = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 1);
+		Thread accessThree = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 2);
+		Thread accessFour = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 2);
+		Thread accessFive = new ThreadSincronized(jonata, "x", "jonata", brokerAddress, brokerPort, 1);
+		Thread accessSix = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 3);
+		Thread accessSeven = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 3);
 
 		accessOne.start();
 		accessTwo.start();
@@ -146,6 +153,15 @@ public class OneAppl {
 				access.join();
 			} catch (Exception e) {
 			}
+
+			Set<Message> log5 = c.getLogMessages();
+			Iterator<Message> it5 = log5.iterator();
+			it5 = log5.iterator();
+			while (it5.hasNext()) {
+				Message aux = it5.next();
+				System.out.print(aux.getContent() + aux.getLogId() + " | ");
+			}
+
 			/*
 			 * Thread access = new ThreadWrapper(c, "joubert_acquire_x", "localhost", 8080);
 			 * access.start(); try { access.join(); } catch (Exception e) { }
