@@ -42,14 +42,14 @@ public class OneAppl {
 		debora.subscribe(brokerAddress, brokerPort);
 		jonata.subscribe(brokerAddress, brokerPort);
 
-		/*Thread accessOne = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 1);
+		Thread accessOne = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 1);
 		Thread accessTwo = new ThreadSincronized(debora, "x", "roberto", brokerAddress, brokerPort, 1);
 		Thread accessThree = new ThreadSincronized(joubert, "x", "luis", brokerAddress, brokerPort, 1);
 		Thread accessFour = new ThreadSincronized(debora, "x", "luis", brokerAddress, brokerPort, 2);
 		Thread accessFive = new ThreadSincronized(jonata, "x", "alan", brokerAddress, brokerPort, 2);
 		Thread accessSix = new ThreadSincronized(debora, "x", "roberto", brokerAddress, brokerPort, 2);
 		Thread accessSeven = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 3);
-		*/
+		/*
 
 		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 1);
 		Thread accessTwo = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 1);
@@ -57,7 +57,7 @@ public class OneAppl {
 		Thread accessFour = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 2);
 		Thread accessFive = new ThreadSincronized(jonata, "x", "jonata", brokerAddress, brokerPort, 1);
 		Thread accessSix = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 3);
-		Thread accessSeven = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 3);
+		Thread accessSeven = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 3);*/
 
 		accessOne.start();
 		accessTwo.start();
@@ -187,7 +187,7 @@ public class OneAppl {
 
 			while (true) {
 				try {
-					Thread.currentThread().sleep(1000);
+					Thread.currentThread().sleep(3000);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -222,6 +222,7 @@ public class OneAppl {
 							}
 						}
 					} catch (Exception e) {
+						log2.remove(i);
 					}
 				}
 
