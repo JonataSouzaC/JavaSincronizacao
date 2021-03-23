@@ -30,7 +30,7 @@ public class SubCommandTwo implements PubSubCommand{
 			
 			response.setContent("Subscriber added: " + m.getContent());
 			
-			//start a client to send all existing log messages
+			//start many clients to send all existing log messages
 			//for the subscribed user
 			if(!log.isEmpty()){
 				Iterator<Message> it = log.iterator();

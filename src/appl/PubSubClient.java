@@ -38,7 +38,7 @@ public class PubSubClient {
 		msgBroker.setType("sub");
 		msgBroker.setContent(clientAddress+":"+clientPort);
 		Client subscriber = new Client(brokerAddress, brokerPort);
-		subscriber.sendReceive(msgBroker);
+		System.out.println(subscriber.sendReceive(msgBroker).getContent());
 	}
 	
 	public void publish(String message, String brokerAddress, int brokerPort){
@@ -118,11 +118,11 @@ public class PubSubClient {
 				message = reader.next();
 				msgPub.setContent(message);
 				
-				/*System.out.println("You must inform the broker credentials...");
+				System.out.println("You must inform the broker credentials...");
 				System.out.print("Enter the broker address (ex. localhost): ");
 				brokerAddress = reader.next();
 				System.out.print("Enter the broker port (ex.8080): ");
-				brokerPort = reader.nextInt();*/
+				brokerPort = reader.nextInt();
 				
 				msgPub.setBrokerId(brokerPort);
 				Client publisher = new Client(brokerAddress, brokerPort);
