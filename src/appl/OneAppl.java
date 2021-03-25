@@ -27,7 +27,7 @@ public class OneAppl {
 
 	public OneAppl(boolean flag) throws InterruptedException {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
-		/*
+		
 		String brokerAddress = "10.128.0.2";
 		int brokerPort = 8080;
 		// System.out.print("Enter the Broker port (ex.8080): ");
@@ -84,8 +84,8 @@ public class OneAppl {
 			accessSeven.join();
 		} catch (Exception e) {
 
-		}*/
-		
+		}
+		/*
 		String brokerAddress = "10.128.0.2";
 		int brokerPort = 8080;
 		String clientAddress = "10.128.0.4";
@@ -137,7 +137,44 @@ public class OneAppl {
 			accessSeven.join();
 		} catch (Exception e) {
 
+		}*/
+
+		List<Message> log = jonata.getLogMessages();
+		List<Message> logAcquire = new ArrayList<Message>(); 
+		List<Message> logRelease = new ArrayList<Message>(); 
+		Iterator<Message> it = log.iterator();
+		it = log.iterator();
+		while (it.hasNext()) {
+			Message aux = it.next();
+			String content = aux.getContent();
+			String[] parts2 = content.split("_");
+			try {
+				if (parts2[1].equals("acquire")) {
+					logAcquire.add(aux);
+				}
+				else{
+					logRelease.add(aux);
+				}
+			} catch(Exception e){
+			} 
 		}
+		System.out.println("Log acquire:\n");
+		it = logAcquire.iterator();
+		while (it.hasNext()){
+			Message aux = it.next();
+			String content = aux.getContent();
+			System.out.print(content + " | ");
+		}
+
+		System.out.println("\n\nLog release:\n");
+		it = logRelease.iterator();
+		while (it.hasNext()){
+			Message aux = it.next();
+			String content = aux.getContent();
+			System.out.print(content + " | ");
+		}
+
+
 
 	}
 
@@ -185,7 +222,7 @@ public class OneAppl {
 			}
 
 			List<Message> log = c.getLogMessages();
-			//CopyOnWriteArrayList<Message> log2 = new CopyOnWriteArrayList <Message>();
+			// CopyOnWriteArrayList<Message> log2 = new CopyOnWriteArrayList <Message>();
 			while (true) {
 				try {
 					Thread.currentThread().sleep(1000);
@@ -193,10 +230,10 @@ public class OneAppl {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} // 1 segundo
-				
+
 				log = c.getLogMessages();
-				//log2 = new CopyOnWriteArrayList <Message>();
-				//log2.addAll(log);
+				// log2 = new CopyOnWriteArrayList <Message>();
+				// log2.addAll(log);
 				Iterator<Message> it = log.iterator();
 				it = log.iterator();
 				while (it.hasNext()) {
@@ -204,9 +241,9 @@ public class OneAppl {
 					String content = i.getContent();
 					try {
 						String[] parts = content.split("_");
-						/*if (parts[1].equals("acquire")) {
-							log2.add(content);
-						}*/
+						/*
+						 * if (parts[1].equals("acquire")) { log2.add(content); }
+						 */
 
 						if (parts[1].equals("release")) {
 							Iterator<Message> it2 = log.iterator();
@@ -226,11 +263,10 @@ public class OneAppl {
 						log.remove(i);
 					}
 				}
-				String first=null;
-				try{
+				String first = null;
+				try {
 					first = log.get(0).getContent();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					System.out.print("Caiu na exception X\n");
 					continue;
 				}
@@ -259,8 +295,6 @@ public class OneAppl {
 				}
 			}
 			log = c.getLogMessages();
-			//log2 = new CopyOnWriteArrayList <Message>();
-			//log2.addAll(log);
 			Iterator<Message> it = log.iterator();
 			it = log.iterator();
 			while (it.hasNext()) {
