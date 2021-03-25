@@ -85,61 +85,8 @@ public class OneAppl {
 		} catch (Exception e) {
 
 		}
-		/*
-		String brokerAddress = "10.128.0.2";
-		int brokerPort = 8080;
-		String clientAddress = "10.128.0.4";
-
-		PubSubClient alan = new PubSubClient(clientAddress, 8081);
-		PubSubClient roberto = new PubSubClient(clientAddress, 8082);
-		PubSubClient luis = new PubSubClient(clientAddress, 8083);
-
-		alan.subscribe(brokerAddress, brokerPort);
-		roberto.subscribe(brokerAddress, brokerPort);
-		luis.subscribe(brokerAddress, brokerPort);
-
-		Thread accessOne = new ThreadSincronized(alan, "x", "alan", brokerAddress, brokerPort, 1);
-		Thread accessTwo = new ThreadSincronized(roberto, "x", "roberto", brokerAddress, brokerPort, 1);
-		Thread accessThree = new ThreadSincronized(alan, "x", "alan", brokerAddress, brokerPort, 2);
-
-		accessOne.start();
-		accessTwo.start();
-		accessThree.start();
-
-		try {
-			accessTwo.join();
-			accessOne.join();
-			accessThree.join();
-		} catch (Exception e) {
-
-		}
-
-		try {
-			Thread.currentThread().sleep(1000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		Thread accessFour = new ThreadSincronized(roberto, "x", "roberto", brokerAddress, brokerPort, 2);
-		Thread accessFive = new ThreadSincronized(luis, "x", "luis", brokerAddress, brokerPort, 1);
-		Thread accessSix = new ThreadSincronized(roberto, "x", "roberto", brokerAddress, brokerPort, 3);
-		Thread accessSeven = new ThreadSincronized(alan, "x", "alan", brokerAddress, brokerPort, 3);
-
-		accessFour.start();
-		accessFive.start();
-		accessSix.start();
-		accessSeven.start();
-		try {
-			accessFour.join();
-			accessFive.join();
-			accessSix.join();
-			accessSeven.join();
-		} catch (Exception e) {
-
-		}*/
-
-		List<Message> log = jonata.getLogMessages();
+	
+		List<Message> log = joubert.getLogMessages();
 		List<Message> logAcquire = new ArrayList<Message>(); 
 		List<Message> logRelease = new ArrayList<Message>(); 
 		Iterator<Message> it = log.iterator();
