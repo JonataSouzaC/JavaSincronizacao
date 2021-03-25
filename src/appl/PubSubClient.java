@@ -1,8 +1,8 @@
 package appl;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 import core.Message;
 import core.MessageImpl;
@@ -41,6 +41,16 @@ public class PubSubClient {
 		System.out.println(subscriber.sendReceive(msgBroker).getContent());
 	}
 	
+	public void unsubscribe(String brokerAddress, int brokerPort){
+		
+		Message msgBroker = new MessageImpl();
+		msgBroker.setBrokerId(brokerPort);
+		msgBroker.setType("unsub");
+		msgBroker.setContent(clientAddress+":"+clientPort);
+		Client subscriber = new Client(brokerAddress, brokerPort);
+		subscriber.sendReceive(msgBroker);
+	}
+	
 	public void publish(String message, String brokerAddress, int brokerPort){
 		Message msgPub = new MessageImpl();
 		msgPub.setBrokerId(brokerPort);
@@ -52,7 +62,7 @@ public class PubSubClient {
 		
 	}
 	
-	public Set<Message> getLogMessages(){
+	public List<Message> getLogMessages(){
 		return observer.getLogMessages();
 	}
 
@@ -128,7 +138,7 @@ public class PubSubClient {
 				Client publisher = new Client(brokerAddress, brokerPort);
 				publisher.sendReceive(msgPub);
 				
-				Set<Message> log = observer.getLogMessages();
+				List<Message> log = observer.getLogMessages();
 				
 				Iterator<Message> it = log.iterator();
 				System.out.print("Log itens: ");

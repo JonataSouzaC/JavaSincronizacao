@@ -1,12 +1,15 @@
 package core;
 
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 //the useful socket consumer
@@ -32,7 +35,6 @@ public class PubSubConsumer<S extends Socket> extends GenericConsumer<S>{
 			ObjectInputStream in = new ObjectInputStream(str.getInputStream());
 			
 			Message msg = (Message) in.readObject();
-			//msg.setBrokerId(brokerId);
 			
 			if(!msg.getType().equals("notify"))
 				msg.setLogId(uniqueLogId);
@@ -52,14 +54,21 @@ public class PubSubConsumer<S extends Socket> extends GenericConsumer<S>{
 			str.close();
 				
 		}catch (Exception e){
-			e.printStackTrace();
-			
+			try {
+				str.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 				
 	}	
 	
-	public Set<Message> getMessages(){
-		return log;
+	public List<Message> getMessages(){
+		CopyOnWriteArrayList<Message> logCopy = new CopyOnWriteArrayList<Message>();
+		logCopy.addAll(log);
+		
+		return logCopy;
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -26,7 +27,7 @@ public class OneAppl {
 
 	public OneAppl(boolean flag) throws InterruptedException {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
-		
+		/*
 		String brokerAddress = "10.128.0.2";
 		int brokerPort = 8080;
 		// System.out.print("Enter the Broker port (ex.8080): ");
@@ -83,8 +84,8 @@ public class OneAppl {
 			accessSeven.join();
 		} catch (Exception e) {
 
-		}
-		/*
+		}*/
+		
 		String brokerAddress = "10.128.0.2";
 		int brokerPort = 8080;
 		String clientAddress = "10.128.0.4";
@@ -136,7 +137,7 @@ public class OneAppl {
 			accessSeven.join();
 		} catch (Exception e) {
 
-		}*/
+		}
 
 	}
 
@@ -183,31 +184,8 @@ public class OneAppl {
 			} catch (Exception e) {
 			}
 
-			/*
-			 * Thread access = new ThreadWrapper(c, "joubert_acquire_x", "localhost", 8080);
-			 * access.start(); try { access.join(); } catch (Exception e) { }
-			 * 
-			 * access = new ThreadWrapper(c, "jonata_acquire_x", "localhost", 8080);
-			 * access.start(); try { access.join(); } catch (Exception e) { }
-			 * 
-			 * access = new ThreadWrapper(c, "joubert_acquire_x", "localhost", 8080);
-			 * access.start(); try { access.join(); } catch (Exception e) { }
-			 * 
-			 * access = new ThreadWrapper(c, "debora_acquire_x", "localhost", 8080);
-			 * access.start(); try { access.join(); } catch (Exception e) { }
-			 * 
-			 * access = new ThreadWrapper(c, "joubert_release_x", "localhost", 8080);
-			 * access.start(); try { access.join(); } catch (Exception e) { }
-			 * 
-			 * access = new ThreadWrapper(c, "jonata_release_x", "localhost", 8080);
-			 * access.start(); try { access.join(); } catch (Exception e) { }
-			 * 
-			 * access = new ThreadWrapper(c, "joubert_release_x", "localhost", 8080);
-			 * access.start(); try { access.join(); } catch (Exception e) { }
-			 */
-
-			Set<Message> log = c.getLogMessages();
-			CopyOnWriteArrayList<Message> log2 = new CopyOnWriteArrayList <Message>();
+			List<Message> log = c.getLogMessages();
+			//CopyOnWriteArrayList<Message> log2 = new CopyOnWriteArrayList <Message>();
 			while (true) {
 				try {
 					Thread.currentThread().sleep(1000);
@@ -217,10 +195,10 @@ public class OneAppl {
 				} // 1 segundo
 				
 				log = c.getLogMessages();
-				log2 = new CopyOnWriteArrayList <Message>();
-				log2.addAll(log);
-				Iterator<Message> it = log2.iterator();
-				it = log2.iterator();
+				//log2 = new CopyOnWriteArrayList <Message>();
+				//log2.addAll(log);
+				Iterator<Message> it = log.iterator();
+				it = log.iterator();
 				while (it.hasNext()) {
 					Message i = it.next();
 					String content = i.getContent();
@@ -231,28 +209,30 @@ public class OneAppl {
 						}*/
 
 						if (parts[1].equals("release")) {
-							Iterator<Message> it2 = log2.iterator();
+							Iterator<Message> it2 = log.iterator();
 							while (it2.hasNext()) {
 								Message j = it2.next();
 								String content2 = j.getContent();
 								String[] parts2 = content2.split("_");
 
 								if (parts2[0].equals(parts[0])) {
-									log2.remove(j);
+									log.remove(j);
+									log.remove(i);
 									break;
 								}
 							}
 						}
 					} catch (Exception e) {
-						log2.remove(i);
+						log.remove(i);
 					}
 				}
 				String first=null;
 				try{
-					first = log2.get(0).getContent();
+					first = log.get(0).getContent();
 				}
 				catch (Exception e) {
-					System.out.print("ASKEOPASKEOPk X\n");
+					System.out.print("Caiu na exception X\n");
+					continue;
 				}
 
 				if (first.equals(client_name + "_acquire_x")) {
@@ -279,10 +259,10 @@ public class OneAppl {
 				}
 			}
 			log = c.getLogMessages();
-			log2 = new CopyOnWriteArrayList <Message>();
-			log2.addAll(log);
-			Iterator<Message> it = log2.iterator();
-			it = log2.iterator();
+			//log2 = new CopyOnWriteArrayList <Message>();
+			//log2.addAll(log);
+			Iterator<Message> it = log.iterator();
+			it = log.iterator();
 			while (it.hasNext()) {
 				Message aux = it.next();
 				System.out.print(aux.getContent() + aux.getLogId() + " | ");

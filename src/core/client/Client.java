@@ -16,8 +16,8 @@ public class Client {
 		try{
 			s = new Socket(ip, port);
 		}catch (Exception e){
-			System.out.println("Client cannot connet with " + ip + " on port: " + port);
-			e.printStackTrace();
+			System.out.println("Client cannot connect with " + ip + " on port: " + port);
+			
 		}
 	}
 	
@@ -35,7 +35,6 @@ public class Client {
 			s.close();
 			return response;
 		}catch(Exception e){
-			System.out.println("Client cannot send/receive a message: " + msg.getContent());
 			return null;
 		}
 	}

@@ -18,8 +18,9 @@ public class NotifyCommand implements PubSubCommand{
 		
 		response.setType("notify_ack");
 		
-		if(!log.contains(m))
-			log.add(m);
+		if(!log.contains(m)){
+			log.add(m);			
+		}
 		
 		System.out.println("Number of Log itens of an Observer " + m.getBrokerId() + " : " + log.size());
 		
