@@ -26,6 +26,7 @@ public class OneAppl {
 
 	public OneAppl(boolean flag) throws InterruptedException {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
+		
 		String brokerAddress = "10.128.0.2";
 		int brokerPort = 8080;
 		// System.out.print("Enter the Broker port (ex.8080): ");
@@ -43,34 +44,39 @@ public class OneAppl {
 		debora.subscribe(brokerAddress, brokerPort);
 		jonata.subscribe(brokerAddress, brokerPort);
 
-		/*Thread accessOne = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 1);
-		Thread accessTwo = new ThreadSincronized(debora, "x", "roberto", brokerAddress, brokerPort, 1);
-		Thread accessThree = new ThreadSincronized(joubert, "x", "luis", brokerAddress, brokerPort, 1);
-		Thread accessFour = new ThreadSincronized(debora, "x", "luis", brokerAddress, brokerPort, 2);
-		Thread accessFive = new ThreadSincronized(jonata, "x", "alan", brokerAddress, brokerPort, 2);
-		Thread accessSix = new ThreadSincronized(debora, "x", "roberto", brokerAddress, brokerPort, 2);
-		Thread accessSeven = new ThreadSincronized(joubert, "x", "alan", brokerAddress, brokerPort, 3);*/
-		
-
 		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 1);
 		Thread accessTwo = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 1);
 		Thread accessThree = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 2);
+
+		accessOne.start();
+		accessTwo.start();
+		accessThree.start();
+
+		try {
+			accessTwo.join();
+			accessOne.join();
+			accessThree.join();
+		} catch (Exception e) {
+
+		}
+
+		try {
+			Thread.currentThread().sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		Thread accessFour = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 2);
 		Thread accessFive = new ThreadSincronized(jonata, "x", "jonata", brokerAddress, brokerPort, 1);
 		Thread accessSix = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 3);
 		Thread accessSeven = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 3);
 
-		accessOne.start();
-		accessTwo.start();
-		accessThree.start();
 		accessFour.start();
 		accessFive.start();
 		accessSix.start();
 		accessSeven.start();
 		try {
-			accessTwo.join();
-			accessOne.join();
-			accessThree.join();
 			accessFour.join();
 			accessFive.join();
 			accessSix.join();
@@ -79,34 +85,59 @@ public class OneAppl {
 
 		}
 		/*
-		 * Set<Message> logJoubert = joubert.getLogMessages(); Set<Message> logDebora =
-		 * debora.getLogMessages(); Set<Message> logJonata = jonata.getLogMessages();
-		 * Iterator<Message> it = logJoubert.iterator();
-		 * 
-		 * Message first = it.next(); String content = first.getContent();
-		 * System.out.print(content);
-		 * 
-		 * if (content.equals("joubert_acquire_x")) {
-		 * System.out.print("\nAcessando X\n"); TimeUnit.SECONDS.sleep(1); accessOne =
-		 * new ThreadWrapper(joubert, "joubert_release_x", "localhost", 8080);
-		 * accessOne.start(); try { accessOne.join(); } catch (Exception e) { } } else
-		 * if (content.equals("debora_acquire_x")) {
-		 * System.out.print("\nAcessando X\n"); TimeUnit.SECONDS.sleep(1); accessTwo =
-		 * new ThreadWrapper(debora, "debora_release_x", "localhost", 8080);
-		 * accessTwo.start(); try { accessTwo.join(); } catch (Exception e) { } } else
-		 * if (content.equals("jonata_acquire_x")) {
-		 * System.out.print("\nAcessando X\n"); TimeUnit.SECONDS.sleep(1); accessThree =
-		 * new ThreadWrapper(jonata, "jonata_release_x", "localhost", 8080);
-		 * accessThree.start(); try { accessThree.join(); } catch (Exception e) { } }
-		 * 
-		 * it = logJonata.iterator(); System.out.print("Log Jonata itens: "); while
-		 * (it.hasNext()) { Message aux = it.next(); System.out.print(aux.getContent() +
-		 * aux.getLogId() + " | "); } System.out.println();
-		 * 
-		 * it = logDebora.iterator(); System.out.print("Log Debora itens: "); while
-		 * (it.hasNext()) { Message aux = it.next(); System.out.print(aux.getContent() +
-		 * aux.getLogId() + " | "); } System.out.println();
-		 */
+		String brokerAddress = "10.128.0.2";
+		int brokerPort = 8080;
+		String clientAddress = "10.128.0.4";
+
+		PubSubClient alan = new PubSubClient(clientAddress, 8081);
+		PubSubClient roberto = new PubSubClient(clientAddress, 8082);
+		PubSubClient luis = new PubSubClient(clientAddress, 8083);
+
+		alan.subscribe(brokerAddress, brokerPort);
+		roberto.subscribe(brokerAddress, brokerPort);
+		luis.subscribe(brokerAddress, brokerPort);
+
+		Thread accessOne = new ThreadSincronized(alan, "x", "alan", brokerAddress, brokerPort, 1);
+		Thread accessTwo = new ThreadSincronized(roberto, "x", "roberto", brokerAddress, brokerPort, 1);
+		Thread accessThree = new ThreadSincronized(alan, "x", "alan", brokerAddress, brokerPort, 2);
+
+		accessOne.start();
+		accessTwo.start();
+		accessThree.start();
+
+		try {
+			accessTwo.join();
+			accessOne.join();
+			accessThree.join();
+		} catch (Exception e) {
+
+		}
+
+		try {
+			Thread.currentThread().sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		Thread accessFour = new ThreadSincronized(roberto, "x", "roberto", brokerAddress, brokerPort, 2);
+		Thread accessFive = new ThreadSincronized(luis, "x", "luis", brokerAddress, brokerPort, 1);
+		Thread accessSix = new ThreadSincronized(roberto, "x", "roberto", brokerAddress, brokerPort, 3);
+		Thread accessSeven = new ThreadSincronized(alan, "x", "alan", brokerAddress, brokerPort, 3);
+
+		accessFour.start();
+		accessFive.start();
+		accessSix.start();
+		accessSeven.start();
+		try {
+			accessFour.join();
+			accessFive.join();
+			accessSix.join();
+			accessSeven.join();
+		} catch (Exception e) {
+
+		}*/
+
 	}
 
 	class ThreadWrapper extends Thread {
