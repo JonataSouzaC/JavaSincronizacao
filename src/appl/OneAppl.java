@@ -25,7 +25,7 @@ public class OneAppl {
 		String brokerAddress = "10.128.0.2";
 		int brokerPort = 8080;
 
-		String clientAddress = "10.128.0.5";
+		String clientAddress = "10.128.0.6";
 
 		PubSubClient nirvana = new PubSubClient(clientAddress, 8084);
 		PubSubClient metallica = new PubSubClient(clientAddress, 8082);
