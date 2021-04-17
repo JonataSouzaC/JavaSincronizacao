@@ -13,9 +13,24 @@ public class Server {
 	protected GenericResource<Socket> resource;
 	protected int port;
 	protected ServerSocket serverSocket;
-		
+	protected boolean isPrimary;
+	protected String secondaryServer;
+	protected int secondaryPort;
+	
 	public Server(int port){
 		this.port = port;
+		isPrimary = true;
+		secondaryServer=null;
+		secondaryPort=-1;
+		
+		resource = new GenericResource<Socket>();
+	}
+		
+	public Server(int port, boolean isPrimary, String secondaryServer, int secondaryPort){
+		this.port = port;
+		this.isPrimary = isPrimary;
+		this.secondaryServer = secondaryServer;
+		this.secondaryPort = secondaryPort;
 		
 		resource = new GenericResource<Socket>();
 		
@@ -27,7 +42,7 @@ public class Server {
 			
 			//just one consumer to guarantee a single
 			//log write mechanism
-			consumer = new PubSubConsumer<Socket>(resource);
+			consumer = new PubSubConsumer<Socket>(resource, isPrimary, secondaryServer, secondaryPort);
 			
 			consumer.start();
 			
@@ -36,6 +51,8 @@ public class Server {
 			//start listening 
 			listen();
 		}catch (Exception e){
+			System.out.println("Erro foi aqui");
+
 			e.printStackTrace();
 		}
 	}

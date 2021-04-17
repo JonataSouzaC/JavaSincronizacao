@@ -1,15 +1,9 @@
 package appl;
 
-import java.security.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import core.Message;
 
@@ -30,24 +24,22 @@ public class OneAppl {
 		
 		String brokerAddress = "10.128.0.2";
 		int brokerPort = 8080;
-		// System.out.print("Enter the Broker port (ex.8080): ");
-		// int brokerPort = reader.nextInt();
 
-		// System.out.print("Enter the Client address (ex. 10.128.0.3): ");
-		// String clientAddress = reader.next();
-		String clientAddress = "10.128.0.3";
+		String clientAddress = "10.128.0.5";
 
-		PubSubClient joubert = new PubSubClient(clientAddress, 8081);
-		PubSubClient debora = new PubSubClient(clientAddress, 8082);
-		PubSubClient jonata = new PubSubClient(clientAddress, 8083);
+		PubSubClient nirvana = new PubSubClient(clientAddress, 8084);
+		PubSubClient metallica = new PubSubClient(clientAddress, 8082);
+		PubSubClient seether = new PubSubClient(clientAddress, 8083);
 
-		joubert.subscribe(brokerAddress, brokerPort);
-		debora.subscribe(brokerAddress, brokerPort);
-		jonata.subscribe(brokerAddress, brokerPort);
+		nirvana.subscribe(brokerAddress, brokerPort);
+		metallica.subscribe(brokerAddress, brokerPort);
+		seether.subscribe(brokerAddress, brokerPort);
+		//Todos desse Client vao se conectar no broker secundario
+		brokerAddress = "10.128.0.3";
 
-		Thread accessOne = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 1);
-		Thread accessTwo = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 1);
-		Thread accessThree = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 2);
+		Thread accessOne = new ThreadSincronized(nirvana, "x", "nirvana", brokerAddress, brokerPort, 1);
+		Thread accessTwo = new ThreadSincronized(metallica, "x", "metallica", brokerAddress, brokerPort, 1);
+		Thread accessThree = new ThreadSincronized(nirvana, "x", "nirvana", brokerAddress, brokerPort, 2);
 
 		accessOne.start();
 		accessTwo.start();
@@ -68,10 +60,10 @@ public class OneAppl {
 			e1.printStackTrace();
 		}
 
-		Thread accessFour = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 2);
-		Thread accessFive = new ThreadSincronized(jonata, "x", "jonata", brokerAddress, brokerPort, 1);
-		Thread accessSix = new ThreadSincronized(debora, "x", "debora", brokerAddress, brokerPort, 3);
-		Thread accessSeven = new ThreadSincronized(joubert, "x", "joubert", brokerAddress, brokerPort, 3);
+		Thread accessFour = new ThreadSincronized(metallica, "x", "metallica", brokerAddress, brokerPort, 2);
+		Thread accessFive = new ThreadSincronized(seether, "x", "seether", brokerAddress, brokerPort, 1);
+		Thread accessSix = new ThreadSincronized(metallica, "x", "metallica", brokerAddress, brokerPort, 3);
+		Thread accessSeven = new ThreadSincronized(nirvana, "x", "nirvana", brokerAddress, brokerPort, 3);
 
 		accessFour.start();
 		accessFive.start();
@@ -86,7 +78,7 @@ public class OneAppl {
 
 		}
 	
-		List<Message> log = joubert.getLogMessages();
+		List<Message> log = nirvana.getLogMessages();
 		List<Message> logAcquire = new ArrayList<Message>(); 
 		List<Message> logRelease = new ArrayList<Message>(); 
 		Iterator<Message> it = log.iterator();

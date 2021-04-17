@@ -13,11 +13,24 @@ public class Broker {
 	public Broker(){		
 
 		Scanner reader = new Scanner(System.in);  // Reading from System.in
-		System.out.print("Enter the Broker port number: ");
+		/*System.out.print("Enter the Broker port number: ");
 		int port = reader.nextInt(); // Scans the next token of the input as an int.
 		
+		System.out.print("Is the broker primary?: Y/N");
+		String respYN = reader.next();
 		
-		Server s = new Server(port);
+		System.out.print("Enter the secondary Broker address: ");
+		String secondAddress = reader.next();
+		
+		System.out.print("Enter the secondary Broker port number: ");
+		int secondPort = reader.nextInt();
+		
+		boolean respBol;
+		if(respYN.equalsIgnoreCase("Y")) respBol = true;
+		else respBol = false;*/
+		
+		Server s = new Server(8080, false, "10.128.0.2", 8080);
+		
 		ThreadWrapper brokerThread = new ThreadWrapper(s);
 		brokerThread.start();
 		

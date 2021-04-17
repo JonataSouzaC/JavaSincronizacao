@@ -10,7 +10,7 @@ import core.PubSubCommand;
 public class NotifyCommand implements PubSubCommand{
 
 	@Override
-	public Message execute(Message m, SortedSet<Message> log, Set<String> subscribers) {
+	public Message execute(Message m, SortedSet<Message> log, Set<String> subscribers, boolean isPrimary, String sencondaryServerAddress, int secondaryServerPort) {
 		
 		Message response = new MessageImpl();
 		
@@ -20,9 +20,9 @@ public class NotifyCommand implements PubSubCommand{
 		
 		if(!log.contains(m)){
 			log.add(m);			
-		}
+		}//else System.out.println("does not insert into log - notify command " + m.getLogId());
 		
-		System.out.println("Number of Log itens of an Observer " + m.getBrokerId() + " : " + log.size());
+		//System.out.println("Notify command - " + m.getBrokerId() + " : " + m.getContent());
 		
 		return response;
 

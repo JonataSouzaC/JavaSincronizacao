@@ -1,6 +1,5 @@
 package core;
 
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,49 +10,76 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import core.client.Client;
 
 //the useful socket consumer
-public class PubSubConsumer<S extends Socket> extends GenericConsumer<S>{
-	
+public class PubSubConsumer<S extends Socket> extends GenericConsumer<S> {
+
 	private int uniqueLogId;
 	private SortedSet<Message> log;
 	private Set<String> subscribers;
-		
-	public PubSubConsumer(GenericResource<S> re) {		
+	private boolean isPrimary;
+	private String secondaryServer;
+	private int secondaryPort;
+
+	public PubSubConsumer(GenericResource<S> re, boolean isPrimary, String secondaryServer, int secondaryPort) {
 		super(re);
 		uniqueLogId = 1;
 		log = new TreeSet<Message>(new MessageComparator());
 		subscribers = new TreeSet<String>();
-		
+
+		this.isPrimary = isPrimary;
+		this.secondaryServer = secondaryServer;
+		this.secondaryPort = secondaryPort;
 	}
-	
-	
+
 	@Override
 	protected void doSomething(S str) {
-		try{
+		try {
 			// TODO Auto-generated method stub
 			ObjectInputStream in = new ObjectInputStream(str.getInputStream());
-			
+
 			Message msg = (Message) in.readObject();
+
+			Message response = null;
+			if (msg.getType().startsWith("syncAddrs")) {
+				response = commands.get(msg.getType()).execute(msg, log, subscribers, isPrimary, secondaryServer,
+						secondaryPort);
+			} else if(msg.getType().startsWith("setPrimary")) {
+				this.isPrimary = true;
+				this.secondaryServer = null;
+				this.secondaryPort = 0;
+			}
 			
-			if(!msg.getType().equals("notify"))
-				msg.setLogId(uniqueLogId);
-			
-			Message response = commands.get(msg.getType()).execute(msg, log, subscribers);
-			
-			if(!msg.getType().equals("notify"))
-				uniqueLogId = msg.getLogId();
+			else if (!isPrimary && !msg.getType().startsWith("sync")) {
+
+				// Client client = new Client(secondaryServer, secondaryPort);
+				// response = client.sendReceive(msg);
+
+				response = new MessageImpl();
+				response.setType("backup");
+				response.setContent(secondaryServer + ":" + secondaryPort);
+
+			} else {
+				if(!msg.getType().equals("notify") && !msg.getType().startsWith("sync"))
+					msg.setLogId(uniqueLogId);
 				
-			
+				response = commands.get(msg.getType()).execute(msg, log, subscribers, isPrimary, secondaryServer, secondaryPort);
+				
+				//if(!msg.getType().equals("notify") && !msg.getType().startsWith("sync"))
+				if(!msg.getType().equals("notify"))
+					uniqueLogId = msg.getLogId();
+			}
+
 			ObjectOutputStream out = new ObjectOutputStream(str.getOutputStream());
 			out.writeObject(response);
 			out.flush();
 			out.close();
 			in.close();
-						
+
 			str.close();
-				
-		}catch (Exception e){
+
+		} catch (Exception e) {
 			try {
 				str.close();
 			} catch (IOException e1) {
@@ -61,13 +87,13 @@ public class PubSubConsumer<S extends Socket> extends GenericConsumer<S>{
 				e1.printStackTrace();
 			}
 		}
-				
-	}	
-	
-	public List<Message> getMessages(){
+
+	}
+
+	public List<Message> getMessages() {
 		CopyOnWriteArrayList<Message> logCopy = new CopyOnWriteArrayList<Message>();
 		logCopy.addAll(log);
-		
+
 		return logCopy;
 	}
 
